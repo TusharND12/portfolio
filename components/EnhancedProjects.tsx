@@ -5,7 +5,6 @@ import { Github, ExternalLink, Star } from 'lucide-react';
 import { projects } from '@/lib/data';
 import { useRef } from 'react';
 import InfiniteScroll from './InfiniteScroll';
-import Image from 'next/image';
 
 function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -74,12 +73,11 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
             {/* Project Image or Icon */}
             {project.image ? (
-              <Image
+              <img
                 src={project.image}
                 alt={project.title}
-                fill
-                className="object-cover rounded-lg z-10"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="absolute inset-0 w-full h-full object-cover rounded-lg z-10"
+                loading="lazy"
               />
             ) : (
               <motion.span

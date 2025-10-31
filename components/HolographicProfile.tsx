@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import Image from 'next/image';
 
 export default function HolographicProfile() {
   const [isHovered, setIsHovered] = useState(false);
@@ -130,12 +129,11 @@ export default function HolographicProfile() {
               }}
             >
               {/* Profile Image */}
-              <Image
+              <img
                 src="/images/20250202_035612 (2).jpg"
                 alt="Tushar Dhokane - Full Stack Developer"
-                fill
-                className="object-cover"
-                priority
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="eager"
               />
 
               {/* Scan line effect */}

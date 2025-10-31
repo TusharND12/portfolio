@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, Star } from 'lucide-react';
 import { projects } from '@/lib/data';
-import Image from 'next/image';
 
 export default function Projects() {
   return (
@@ -48,12 +47,11 @@ export default function Projects() {
                   }}
                 />
                 {project.image ? (
-                  <Image
+                  <img
                     src={project.image}
                     alt={project.title}
-                    fill
-                    className="object-cover rounded-lg z-10"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg z-10"
+                    loading="lazy"
                   />
                 ) : (
                   <span className="text-6xl filter blur-sm group-hover:blur-none transition-all">
