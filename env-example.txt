@@ -1,0 +1,16 @@
+# Email Configuration
+# Copy this to .env.local and update with your email credentials
+
+# For Gmail, you need to:
+# 1. Enable 2-factor authentication
+# 2. Generate an App Password (not your regular password)
+# 3. Use the App Password here
+
+# Only EMAIL_PASS is needed - sender email is fixed to tushardhokane12@gmail.com
+EMAIL_PASS=your-app-password
+
+# Example for Gmail:
+# EMAIL_PASS=abcd efgh ijkl mnop
+
+# For other email providers, adjust the service in emailService.ts
+# Available services: gmail, outlook, yahoo, etc.

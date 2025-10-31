@@ -1,0 +1,54 @@
+// Prisma schema for portfolio database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+  read      Boolean  @default(false)
+
+  @@map("contacts")
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  event     String
+  page      String?
+  data      Json?
+  createdAt DateTime @default(now())
+
+  @@map("analytics")
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  userId      String
+  achievementId String
+  unlockedAt  DateTime @default(now())
+
+  @@unique([userId, achievementId])
+  @@map("achievements")
+}
+
+model Visitor {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique
+  userAgent   String?
+  ipAddress   String?
+  country     String?
+  createdAt   DateTime @default(now())
+  lastSeen    DateTime @updatedAt
+
+  @@map("visitors")
+}
+
