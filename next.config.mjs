@@ -15,11 +15,49 @@ const nextConfig = {
   },
   // Remove trailing slash for better compatibility
   trailingSlash: false,
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.externals.push({
       'bufferutil': 'bufferutil',
       'utf-8-validate': 'utf-8-validate',
     });
+    
+    // Fix for chunk loading errors
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+    
+    // Optimize chunk splitting for large components like Universe
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        ...config.optimization.splitChunks,
+        chunks: 'all',
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          // Separate vendor chunks
+          vendor: {
+            name: 'vendor',
+            chunks: 'all',
+            test: /node_modules/,
+            priority: 20,
+          },
+          // Separate React Three Fiber (large library)
+          r3f: {
+            name: 'r3f',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/](@react-three|three)[\\/]/,
+            priority: 30,
+          },
+        },
+      },
+    };
+    
     return config;
   },
 };

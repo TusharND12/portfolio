@@ -7,11 +7,17 @@ import { useThemeStore } from '@/lib/store';
 
 const EnhancedHero = dynamic(() => import('@/components/EnhancedHero'), { ssr: false });
 
-// Dynamically import 3D components
-const Universe = dynamic(() => import('@/components/Universe'), {
-  ssr: false,
-  loading: () => <div className="flex items-center justify-center h-screen">Loading Universe...</div>,
-});
+// Dynamically import 3D components with error handling
+const Universe = dynamic(
+  () => import('@/components/Universe').catch((err) => {
+    console.error('Failed to load Universe component:', err);
+    return { default: () => <div className="flex items-center justify-center h-screen text-gray-400">Universe loading failed</div> };
+  }),
+  {
+    ssr: false,
+    loading: () => <div className="flex items-center justify-center h-screen">Loading Universe...</div>,
+  }
+);
 
 const EnhancedProjects = dynamic(() => import('@/components/EnhancedProjects'), { ssr: false });
 const Skills = dynamic(() => import('@/components/Skills'), { ssr: false });
@@ -51,7 +57,13 @@ export default function Home() {
       {/* 3D Universe Background (for universe mode) */}
       {mode === 'universe' && (
         <div className="fixed inset-0 -z-10">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense 
+            fallback={
+              <div className="flex items-center justify-center h-screen">
+                <div className="text-gray-400">Loading Universe...</div>
+              </div>
+            }
+          >
             <Universe />
           </Suspense>
         </div>
