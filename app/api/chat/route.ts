@@ -40,8 +40,87 @@ export async function POST(request: NextRequest) {
       return allSkills.filter(s => s.name.toLowerCase().includes(query));
     };
 
+    // Handle terminal commands
+    if (lowerMessage.trim() === 'ls' || lowerMessage.trim() === 'ls -la' || lowerMessage.trim() === 'ls -la portfolio/') {
+      response = `$ ls -la portfolio/
+drwxr-xr-x 8 tushar tushar 4096 Dec 2024 projects/
+drwxr-xr-x 6 tushar tushar 4096 Dec 2024 skills/
+drwxr-xr-x 4 tushar tushar 4096 Dec 2024 experience/
+drwxr-xr-x 3 tushar tushar 4096 Dec 2024 achievements/
+drwxr-xr-x 4 tushar tushar 4096 Dec 2024 contact/
+
+$ echo "Type 'help' for available commands"`;
+    }
+    else if (lowerMessage.trim() === 'help' || lowerMessage.trim() === '--help' || lowerMessage.trim() === '-h') {
+      response = `$ help
+Available Commands:
+==================
+
+Portfolio Navigation:
+• ls                    # List portfolio directories
+• cat README.md         # Show portfolio overview
+
+Search Commands:
+• search projects <tech>    # Find projects by technology (e.g., 'search projects python')
+• search skills <name>      # Find skills by name (e.g., 'search skills react')
+• search achievements       # View all achievements
+• search experience          # View work experience
+
+Information Commands:
+• contact info          # Get contact information
+• whoami                # About Tushar Dhokane
+
+Examples:
+• "python projects"     # Find Python projects
+• "react skills"        # Find React expertise
+• "ml achievements"     # Find ML achievements
+• "contact"            # Get contact details
+
+Type any query to search through portfolio data...`;
+    }
+    else if (lowerMessage.trim() === 'whoami') {
+      response = `$ whoami
+tushar-ai-assistant
+
+$ echo "Hello! I'm the AI assistant for Tushar Dhokane's portfolio."
+Hello! I'm the AI assistant for Tushar Dhokane's portfolio.
+
+$ cat README.md
+AI Assistant for ${personalInfo.name}'s Portfolio
+===============================================
+
+Available commands:
+• search projects python    # Find Python projects
+• search skills react       # Find React expertise  
+• search achievements ml    # Find ML achievements
+• search experience intern  # Find internship details
+• contact info             # Get contact information
+
+$ help
+Type your query to search through portfolio data...`;
+    }
+    else if (lowerMessage.includes('cat readme.md') || lowerMessage.includes('readme')) {
+      response = `$ cat README.md
+AI Assistant for ${personalInfo.name}'s Portfolio
+===============================================
+
+Available commands:
+• search projects <tech>    # Find projects by technology
+• search skills <name>      # Find skills by name
+• search achievements       # View all achievements
+• search experience         # View work experience
+• contact info              # Get contact information
+
+Examples:
+• "python projects"
+• "react skills"
+• "ml achievements"
+• "contact"
+
+Type 'help' for more commands or ask any question!`;
+    }
     // Comprehensive search responses
-    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+    else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
       response = `$ whoami
 tushar-ai-assistant
 

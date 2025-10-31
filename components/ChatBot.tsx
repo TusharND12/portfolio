@@ -62,19 +62,64 @@ Type your query to search through portfolio data...`,
         body: JSON.stringify({ message: userMessage }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+
       const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: data.response },
+        { role: 'assistant', content: data.response || 'I received your message but have no response.' },
       ]);
     } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: 'Sorry, I encountered an error. Please try again.',
-        },
-      ]);
+      console.error('Chat error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      // Check if it's a network error (API route not available, e.g., on GitHub Pages)
+      if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError')) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: `$ echo "Note: Chat assistant requires API routes."
+Note: Chat assistant requires API routes.
+
+$ cat INFO.md
+The chat assistant API is not available on static hosting.
+
+Available locally or on platforms with server support:
+• GitHub Pages: API routes not supported (static hosting)
+• Vercel/Netlify: Full support available
+• Local development: Works perfectly
+
+For more information, visit the contact form or check the repository README.
+
+$ help
+Try these instead:
+• Browse the portfolio sections
+• Use the contact form
+• Check GitHub/LinkedIn for direct contact`,
+          },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: `$ echo "Error: ${errorMessage}"
+Error: ${errorMessage}
+
+$ echo "Please try again or type 'help' for available commands."
+Please try again or type 'help' for available commands.`,
+          },
+        ]);
+      }
     } finally {
       setIsLoading(false);
     }
