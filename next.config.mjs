@@ -4,6 +4,8 @@ const nextConfig = {
   transpilePackages: ['three'],
   // Enable static export for GitHub Pages
   output: 'export',
+  // Base path for GitHub Pages (repository name)
+  basePath: '/portfolio',
   // Disable image optimization for static export
   images: {
     unoptimized: true,
