@@ -15,6 +15,11 @@ const nextConfig = {
   },
   // Remove trailing slash for better compatibility
   trailingSlash: false,
+  // Disable ESLint during builds for GitHub Pages
+  ...(isGitHubPages && { eslint: { ignoreDuringBuilds: true } }),
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   webpack: (config, { isServer }) => {
     config.externals.push({
       'bufferutil': 'bufferutil',

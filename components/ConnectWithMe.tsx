@@ -210,18 +210,9 @@ export default function ConnectWithMe() {
                                   style={{ width: '88px', height: '88px' }}
                                   loading="eager"
                                   onError={(e) => {
-                                    console.log('QR code image failed to load, trying fallback...');
-                                    // Try the root path as fallback
-                                    e.currentTarget.src = '/resume-qr.png';
-                                    e.currentTarget.onError = () => {
-                                      console.log('Both QR code paths failed');
-                                      // Show a visible fallback if both paths fail
-                                      e.currentTarget.style.display = 'none';
-                                      const container = e.currentTarget.parentElement;
-                                      if (container) {
-                                        container.innerHTML = '<div class="relative z-10 text-black text-lg font-bold bg-white rounded-lg w-full h-full flex items-center justify-center border-2 border-red-500">QR CODE</div>';
-                                      }
-                                    };
+                                    console.log('QR code image failed to load');
+                                    // Hide image if it fails
+                                    e.currentTarget.style.display = 'none';
                                   }}
                                 />
                                 
